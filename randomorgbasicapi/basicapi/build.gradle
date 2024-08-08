@@ -11,6 +11,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        resValue "string", "api_key", properties.getProperty("API_KEY", "")
     }
 
     buildTypes {
@@ -24,7 +29,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    sourceSets.main.res.filter.exclude 'src/main/java/lib/RandomJSONRPC/src/org/random/test/*'
+    sourceSets {
+        main {
+            java {
+                exclude 'lib/RandomJSONRPC/src/org/random/test/**'
+            }
+        }
+    }
 
 }
 
