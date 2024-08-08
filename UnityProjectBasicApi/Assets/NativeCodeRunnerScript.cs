@@ -69,7 +69,6 @@ public class NativeCodeRunner : MonoBehaviour {
 
     public void DropdownValueChanged(TMP_Dropdown change)
     {
-        messageText.text = "New Value : " + change.value;
     }
 
     void Start() {
