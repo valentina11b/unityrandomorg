@@ -27,7 +27,7 @@ public class RandomORGApp extends Application {
             int[][] res = roc.generateIntegerSequences(n, len, min, max);
             int[] ret = new int[n*len];
             for(int i = 0; i < n; i++) {
-                if (len >= 0) System.arraycopy(res[i], 0, ret, i * n, len);
+                if (len >= 0) System.arraycopy(res[i], 0, ret, i * len, len);
             }
             return ret;
         } catch (IOException e) {

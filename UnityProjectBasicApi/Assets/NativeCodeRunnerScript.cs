@@ -12,6 +12,7 @@ public class NativeCodeRunner : MonoBehaviour {
     public string message = "";
 
     [SerializeField] public Button runButton;
+    [SerializeField] public TMP_InputField nInput;
 
     public void OnButtonPress()
     {
@@ -20,14 +21,15 @@ public class NativeCodeRunner : MonoBehaviour {
         string msg = "Result:\n";
         try
         {
+            int n = Int32.Parse(nInput.text);
         if (m_Dropdown.value == 0)
             {
-                msg += string.Join("\n", GetRandomInteger());
+                msg += string.Join("\n", GetRandomInteger(n));
             }
             else if (m_Dropdown.value == 1)
             {
-                int[][] matrix = GetRandomIntegerSequences(5, 5);
-                for (int i = 0; i < 5; i++)
+                int[][] matrix = GetRandomIntegerSequences(n, 7);
+                for (int i = 0; i < n; i++)
                 {
                     msg += "[" + string.Join(", ", matrix[i]) + "]\n";
                 }
@@ -36,23 +38,23 @@ public class NativeCodeRunner : MonoBehaviour {
         }
             else if (m_Dropdown.value == 2)
             {
-                msg += string.Join("\n", GetRandomDecimalFractions());
+                msg += string.Join("\n", GetRandomDecimalFractions(n));
             }
             else if (m_Dropdown.value == 3)
             {
-                msg += string.Join("\n", GetRandomGaussians());
+                msg += string.Join("\n", GetRandomGaussians(n));
             }
             else if (m_Dropdown.value == 4)
             {
-                msg += string.Join("\n", GetRandomStrings());
+                msg += string.Join("\n", GetRandomStrings(n));
             }
             else if (m_Dropdown.value == 5)
             {
-                msg += string.Join("\n", GetRandomUUIDs(5));
+                msg += string.Join("\n", GetRandomUUIDs(n));
             }
             else if (m_Dropdown.value == 6)
             {
-                msg += string.Join("\n", GetRandomBlobs());
+                msg += string.Join("\n", GetRandomBlobs(n));
             }
             } catch(Exception e)
             {
@@ -71,16 +73,17 @@ public class NativeCodeRunner : MonoBehaviour {
     }
 
     void Start() {
+        nInput.text = "5";
     } 
 
-     public int[] GetRandomInteger() {
+     public int[] GetRandomInteger(int n) {
        if (Application.platform == RuntimePlatform.Android) {
            AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
            AndroidJavaObject unityActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");        
            AndroidJavaObject alert = new AndroidJavaObject("rs.assignments.basicapi.RandomORGApp");            
            object[] parameters = new object[4];
            parameters[0] = unityActivity;
-           parameters[1] = 5; // n
+           parameters[1] = n; // n
            parameters[2] = 0; // min
            parameters[3] = 55; // max
            return alert.Call<int[]>("GetRandomInteger", parameters);
@@ -108,7 +111,7 @@ public class NativeCodeRunner : MonoBehaviour {
                 split[i] = new int[len];
                 for (int j = 0; j < len; j++)
                 {
-                    split[i][j] = ret[i * n + j];
+                    split[i][j] = ret[i * len + j];
                 }
             }
             return split;
@@ -116,7 +119,7 @@ public class NativeCodeRunner : MonoBehaviour {
         return new int[0][];
     }
 
-    public double[] GetRandomDecimalFractions()
+    public double[] GetRandomDecimalFractions(int n)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -125,14 +128,14 @@ public class NativeCodeRunner : MonoBehaviour {
             AndroidJavaObject alert = new AndroidJavaObject("rs.assignments.basicapi.RandomORGApp");
             object[] parameters = new object[3];
             parameters[0] = unityActivity;
-            parameters[1] = 5; // n
+            parameters[1] = n; // n
             parameters[2] = 3; // decimalPlaces
             return alert.Call<double[]>("GetRandomDecimalFractions", parameters);
         }
         return new double[0];
     }
 
-    public double[] GetRandomGaussians()
+    public double[] GetRandomGaussians(int n)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -141,7 +144,7 @@ public class NativeCodeRunner : MonoBehaviour {
             AndroidJavaObject alert = new AndroidJavaObject("rs.assignments.basicapi.RandomORGApp");
             object[] parameters = new object[5];
             parameters[0] = unityActivity;
-            parameters[1] = 4; // n
+            parameters[1] = n; // n
             parameters[2] = 0.0; // mean
             parameters[3] = 1.0; // standardDeviation
             parameters[4] = 8; // significantDigits
@@ -149,7 +152,7 @@ public class NativeCodeRunner : MonoBehaviour {
         }
         return new double[0];
     }
-    public string[] GetRandomStrings()
+    public string[] GetRandomStrings(int n)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -158,7 +161,7 @@ public class NativeCodeRunner : MonoBehaviour {
             AndroidJavaObject alert = new AndroidJavaObject("rs.assignments.basicapi.RandomORGApp");
             object[] parameters = new object[4];
             parameters[0] = unityActivity;
-            parameters[1] = 4; // n
+            parameters[1] = n; // n
             parameters[2] = 9; // len
             parameters[3] = "abcdefghijklmnopqrstuvwxyz"; // characters
             return alert.Call<string[]>("GetRandomStrings", parameters);
@@ -185,7 +188,7 @@ public class NativeCodeRunner : MonoBehaviour {
         }
         return new Guid[0];
     }
-    public string[] GetRandomBlobs()
+    public string[] GetRandomBlobs(int n)
     {
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -194,7 +197,7 @@ public class NativeCodeRunner : MonoBehaviour {
             AndroidJavaObject alert = new AndroidJavaObject("rs.assignments.basicapi.RandomORGApp");
             object[] parameters = new object[3];
             parameters[0] = unityActivity;
-            parameters[1] = 4; // n
+            parameters[1] = n; // n
             parameters[2] = 8; // size, must be divisible by 8
             return alert.Call<string[]>("GetRandomBlobs", parameters);
         }
