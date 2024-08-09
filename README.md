@@ -14,7 +14,7 @@ git clone --recursive git@github.com:valentina11b/unityrandomorg.git
 To set up the existing Unity project, locate the MainScene in the Assets/Scenes directory. Be sure to switch the platform to Android in the Build Settings. If you need to update the Android library for Random.org, rebuild the AAR file and replace it in the Assets/Plugins/Android directory.
 
 ## App preview
-Setting the number of parameters will determine how many random values you receive.
+Setting n parameter will determine how many random values you receive.
 
 Main View                  |      Select API       |  Get Result               |  Get Result n = 7
 :-------------------------:|:---------------------:|:-------------------------:|:-------------------------:
